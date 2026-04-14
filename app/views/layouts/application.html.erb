@@ -17,16 +17,34 @@
 
   <body class="bg-gray-50 font-sans text-gray-900">
     <% if user_signed_in? %>
-      <div class="flex h-screen overflow-hidden">
-        <%# Sidebar %>
-        <aside class="w-64 bg-gray-900 text-white flex flex-col flex-shrink-0">
-          <div class="px-6 py-5 border-b border-gray-700">
-            <h1 class="text-lg font-bold tracking-tight">BJJ Admin</h1>
-            <p class="text-xs text-gray-400 mt-0.5"><%= current_academy.name %></p>
+      <div class="flex h-screen overflow-hidden" data-controller="sidebar">
+
+        <%# Mobile overlay %>
+        <div data-sidebar-target="overlay"
+             data-action="click->sidebar#close"
+             class="hidden fixed inset-0 z-40 bg-black/50 lg:hidden"></div>
+
+        <%# Sidebar — drawer on mobile, static on desktop %>
+        <aside data-sidebar-target="panel"
+               class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 text-white flex flex-col
+                      -translate-x-full transition-transform duration-300 ease-in-out
+                      lg:relative lg:translate-x-0 lg:flex-shrink-0">
+          <div class="px-6 py-5 border-b border-gray-700 flex items-center justify-between">
+            <div>
+              <h1 class="text-lg font-bold tracking-tight">BJJ Admin</h1>
+              <p class="text-xs text-gray-400 mt-0.5"><%= current_academy.name %></p>
+            </div>
+            <%# Close button — mobile only %>
+            <button data-action="sidebar#close"
+                    class="lg:hidden p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 transition-colors">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
           </div>
 
           <nav class="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-            <%= nav_link "Dashboard",  root_path do %>
+            <%= nav_link "Dashboard", root_path do %>
               <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
               <span>Dashboard</span>
             <% end %>
@@ -58,8 +76,20 @@
 
         <%# Main content %>
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+          <%# Mobile top bar %>
+          <header class="lg:hidden flex items-center gap-3 px-4 py-3 bg-gray-900 text-white flex-shrink-0 border-b border-gray-700">
+            <button data-action="sidebar#open"
+                    class="p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 transition-colors">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+              </svg>
+            </button>
+            <span class="text-sm font-bold tracking-tight">BJJ Admin</span>
+          </header>
+
           <%# Flash messages %>
-          <div id="flash" class="px-6 pt-4 space-y-2">
+          <div id="flash" class="px-4 pt-4 space-y-2 lg:px-6">
             <% flash.each do |type, message| %>
               <div data-controller="alert"
                    class="<%= flash_class(type) %> px-4 py-3 rounded-lg flex items-center justify-between">
@@ -69,7 +99,7 @@
             <% end %>
           </div>
 
-          <main class="flex-1 overflow-y-auto px-6 py-6">
+          <main class="flex-1 overflow-y-auto px-4 py-4 lg:px-6 lg:py-6">
             <%= yield %>
           </main>
         </div>
