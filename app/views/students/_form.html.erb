@@ -29,13 +29,13 @@
 
     <div>
       <%= f.label :belt, "Faixa", class: "form-label" %>
-      <%= f.select :belt, Student.belts.keys.map { |b| [b.capitalize, b] },
+      <%= f.select :belt, Student.belts.keys.map { |b| [t("enums.student.belt.#{b}"), b] },
             {}, class: "form-input" %>
     </div>
 
     <div>
       <%= f.label :status, "Status", class: "form-label" %>
-      <%= f.select :status, Student.statuses.keys.map { |s| [s.capitalize, s] },
+      <%= f.select :status, Student.statuses.keys.map { |s| [t("enums.status.#{s}"), s] },
             {}, class: "form-input" %>
     </div>
 

@@ -1,0 +1,112 @@
+pt-BR:
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      short: "%d/%m"
+      long: "%d de %B de %Y"
+    day_names: [Domingo, Segunda-feira, Terça-feira, Quarta-feira, Quinta-feira, Sexta-feira, Sábado]
+    abbr_day_names: [Dom, Seg, Ter, Qua, Qui, Sex, Sáb]
+    month_names: [~, Janeiro, Fevereiro, Março, Abril, Maio, Junho, Julho, Agosto, Setembro, Outubro, Novembro, Dezembro]
+    abbr_month_names: [~, Jan, Fev, Mar, Abr, Mai, Jun, Jul, Ago, Set, Out, Nov, Dez]
+
+  time:
+    formats:
+      default: "%d/%m/%Y %H:%M"
+      short: "%d/%m %H:%M"
+      long: "%d de %B de %Y, %H:%M"
+
+  number:
+    currency:
+      format:
+        unit: "R$"
+        precision: 2
+        separator: ","
+        delimiter: "."
+        format: "%u %n"
+
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "A validação falhou: %{errors}"
+        restrict_dependent_destroy:
+          has_one: "Não é possível excluir o registro pois existe um %{record} dependente"
+          has_many: "Não é possível excluir o registro pois existem %{record} dependentes"
+      models:
+        academy:
+          attributes:
+            name: { blank: "não pode ficar em branco" }
+            slug: { blank: "não pode ficar em branco", taken: "já está em uso" }
+        user:
+          attributes:
+            email: { blank: "não pode ficar em branco", taken: "já está em uso" }
+            password: { blank: "não pode ficar em branco", too_short: "é muito curta (mínimo %{count} caracteres)" }
+        student:
+          attributes:
+            name: { blank: "não pode ficar em branco" }
+        payment:
+          attributes:
+            amount_cents: { greater_than: "deve ser maior que 0" }
+            due_date: { blank: "não pode ficar em branco" }
+
+  errors:
+    messages:
+      not_saved:
+        one: "1 erro impediu o salvamento deste %{resource}:"
+        other: "%{count} erros impediram o salvamento deste %{resource}:"
+
+  # ── Form helpers ─────────────────────────────────────────────────────────
+  helpers:
+    submit:
+      create: "Cadastrar %{model}"
+      update: "Salvar alterações"
+      submit: "Salvar %{model}"
+      student:
+        create: "Cadastrar Aluno"
+        update: "Salvar Aluno"
+      health_record:
+        create: "Salvar Ficha"
+        update: "Salvar Ficha"
+      plan:
+        create: "Cadastrar Plano"
+        update: "Salvar Plano"
+      payment:
+        create: "Registrar Pagamento"
+        update: "Salvar Pagamento"
+
+  activerecord:
+    models:
+      student:      Aluno
+      academy:      Academia
+      plan:         Plano
+      enrollment:   Matrícula
+      payment:      Pagamento
+      health_record: Ficha de Saúde
+
+  # ── Enums ────────────────────────────────────────────────────────────────
+  enums:
+    student:
+      belt:
+        white:  Branca
+        blue:   Azul
+        purple: Roxa
+        brown:  Marrom
+        black:  Preta
+    plan:
+      interval:
+        monthly:    Mensal
+        quarterly:  Trimestral
+        semiannual: Semestral
+    payment:
+      method:
+        pix:   PIX
+        cash:  Dinheiro
+        card:  Cartão
+        other: Outro
+    status:
+      active:    Ativo
+      inactive:  Inativo
+      suspended: Suspenso
+      paid:      Pago
+      pending:   Pendente
+      overdue:   Inadimplente
+      cancelled: Cancelado

@@ -16,7 +16,7 @@
     <div>
       <%= f.label :interval, "Periodicidade", class: "form-label" %>
       <%= f.select :interval,
-            Plan.intervals.keys.map { |i| [i.capitalize, i] },
+            Plan.intervals.keys.map { |i| [t("enums.plan.interval.#{i}"), i] },
             {}, class: "form-input" %>
     </div>
 

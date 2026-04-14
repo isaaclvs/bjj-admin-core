@@ -21,12 +21,12 @@
               data: { filter_target: "input" } %>
 
         <%= f.select :belt,
-              Student.belts.keys.map { |b| [b.capitalize, b] }.unshift(["Todas as faixas", ""]),
+              Student.belts.keys.map { |b| [t("enums.student.belt.#{b}"), b] }.unshift(["Todas as faixas", ""]),
               { selected: params[:belt] },
               class: "form-input", data: { filter_target: "input" } %>
 
         <%= f.select :status,
-              Student.statuses.keys.map { |s| [s.capitalize, s] }.unshift(["Todos os status", ""]),
+              Student.statuses.keys.map { |s| [t("enums.status.#{s}"), s] }.unshift(["Todos os status", ""]),
               { selected: params[:status] },
               class: "form-input", data: { filter_target: "input" } %>
 

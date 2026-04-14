@@ -2,7 +2,7 @@
   <div class="flex items-start justify-between">
     <div>
       <h3 class="font-semibold text-gray-900"><%= plan.name %></h3>
-      <p class="text-sm text-gray-500 capitalize"><%= plan.interval %></p>
+      <p class="text-sm text-gray-500"><%= t("enums.plan.interval.#{plan.interval}") %></p>
     </div>
     <% unless plan.active? %>
       <span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-500">Inativo</span>
