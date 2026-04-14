@@ -8,7 +8,9 @@ class ApplicationPolicy
 
   def index?   = user.owner?
   def show?    = user.owner?
+  def new?     = create?
   def create?  = user.owner?
+  def edit?    = update?
   def update?  = user.owner?
   def destroy? = user.owner?
 
