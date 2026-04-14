@@ -51,7 +51,7 @@ statuses = %w[active active active inactive]
   unless student.health_record
     student.create_health_record!(
       blood_type:    %w[A+ B+ O+ AB+].sample,
-      comorbidities: i == 0 ? ["hipertensão"] : [],
+      comorbidities: i == 0 ? [ "hipertensão" ] : [],
       allergies:     [],
       injuries:      [],
       lgpd_consent:  true,

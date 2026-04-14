@@ -10,7 +10,7 @@ RSpec.describe HealthRecord, type: :model do
       student = create(:student)
       record = create(:health_record,
                       student: student,
-                      comorbidities: ["hipertensão"])
+                      comorbidities: [ "hipertensão" ])
       expect(record.risk_flag).to be true
     end
 
@@ -18,7 +18,7 @@ RSpec.describe HealthRecord, type: :model do
       student = create(:student)
       record = create(:health_record,
                       student: student,
-                      comorbidities: ["miopia"])
+                      comorbidities: [ "miopia" ])
       expect(record.risk_flag).to be false
     end
   end

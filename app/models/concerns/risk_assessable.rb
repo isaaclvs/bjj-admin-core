@@ -21,7 +21,7 @@ module RiskAssessable
   end
 
   def risk_text_fields
-    [comorbidities, injuries, medication_notes].flatten.compact
+    [ comorbidities, injuries, medication_notes ].flatten.compact
   end
 
   def mentions_risk?(text)

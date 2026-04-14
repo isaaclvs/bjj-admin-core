@@ -45,7 +45,7 @@ RSpec.describe StudentsFilterQuery do
     describe "filter by risk (at_risk=1)" do
       it "returns only students with risk health records" do
         risky  = create(:student, academy: academy)
-        create(:health_record, student: risky, comorbidities: ["hipertensão"])
+        create(:health_record, student: risky, comorbidities: [ "hipertensão" ])
 
         safe = create(:student, academy: academy)
         create(:health_record, student: safe, comorbidities: [])

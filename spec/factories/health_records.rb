@@ -11,7 +11,7 @@ FactoryBot.define do
     risk_flag      { false }
 
     trait :with_risk do
-      comorbidities { ["hipertensão"] }
+      comorbidities { [ "hipertensão" ] }
       risk_flag     { true }
     end
   end
