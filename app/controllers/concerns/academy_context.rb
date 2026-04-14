@@ -13,6 +13,6 @@ module AcademyContext
   end
 
   def set_current_academy
-    @current_academy = current_user.academy
+    @current_academy = current_user&.academy
   end
 end

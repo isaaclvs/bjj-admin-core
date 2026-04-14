@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   include AcademyContext
   include Pagy::Backend
 
-  before_action :authenticate_user!
+  prepend_before_action :authenticate_user!
 
   allow_browser versions: :modern
   stale_when_importmap_changes
