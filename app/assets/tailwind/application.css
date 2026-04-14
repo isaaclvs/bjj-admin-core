@@ -1,31 +1,79 @@
 @import "tailwindcss";
 
 @layer components {
+  /* ── Buttons ───────────────────────────────────────────────────────────── */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors;
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 text-white
+           text-sm font-semibold rounded-lg shadow-sm hover:bg-indigo-700
+           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
+           transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-lg border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors;
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white text-gray-700
+           text-sm font-semibold rounded-lg border border-gray-300 shadow-sm hover:bg-gray-50
+           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
+           transition-colors;
   }
 
   .btn-danger {
-    @apply inline-flex items-center justify-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors;
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-red-600 text-white
+           text-sm font-semibold rounded-lg shadow-sm hover:bg-red-700
+           focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
+           transition-colors;
   }
 
+  /* ── Forms ─────────────────────────────────────────────────────────────── */
   .form-label {
-    @apply block text-sm font-medium text-gray-700 mb-1;
+    @apply block text-sm font-medium text-gray-700 mb-1.5;
   }
 
   .form-input {
-    @apply block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 focus:outline-none;
+    @apply block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900
+           bg-gray-50 placeholder-gray-400 shadow-sm
+           focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500
+           focus:ring-offset-0 focus:outline-none transition;
   }
 
+  /* ── Tables ─────────────────────────────────────────────────────────────── */
   .th {
     @apply px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider;
   }
 
   .td {
-    @apply px-4 py-3 text-sm text-gray-900;
+    @apply px-4 py-3.5 text-sm text-gray-900;
+  }
+
+  /* ── Cards ──────────────────────────────────────────────────────────────── */
+  .card {
+    @apply bg-white rounded-2xl border border-gray-200 shadow-sm p-6;
+  }
+
+  /* ── Page header ─────────────────────────────────────────────────────────── */
+  .page-title {
+    @apply text-2xl font-bold text-gray-900 tracking-tight;
+  }
+
+  /* ── Pagy pagination ────────────────────────────────────────────────────── */
+  .pagy nav {
+    @apply flex items-center justify-center gap-1;
+  }
+
+  .pagy nav a,
+  .pagy nav span {
+    @apply inline-flex items-center justify-center h-8 min-w-8 px-2 rounded-lg text-sm
+           font-medium transition-colors;
+  }
+
+  .pagy nav a {
+    @apply text-gray-600 hover:bg-gray-100 hover:text-gray-900;
+  }
+
+  .pagy nav .current {
+    @apply bg-indigo-600 text-white shadow-sm;
+  }
+
+  .pagy nav .disabled {
+    @apply text-gray-300 cursor-not-allowed;
   }
 }
