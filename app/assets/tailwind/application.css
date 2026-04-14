@@ -54,6 +54,16 @@
     @apply text-2xl font-bold text-gray-900 tracking-tight;
   }
 
+  /* ── Form action row ─────────────────────────────────────────────────────── */
+  .form-actions {
+    @apply flex flex-col sm:flex-row gap-3 pt-2;
+  }
+
+  .form-actions .btn-primary,
+  .form-actions .btn-secondary {
+    @apply w-full sm:w-auto;
+  }
+
   /* ── Pagy pagination ────────────────────────────────────────────────────── */
   .pagy nav {
     @apply flex items-center justify-center gap-1;

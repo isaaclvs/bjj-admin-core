@@ -6,7 +6,7 @@
   </div>
 
   <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-    <div class="flex items-start justify-between">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
       <div>
         <h2 class="text-2xl font-bold text-gray-900"><%= @student.name %></h2>
         <div class="mt-2 flex items-center gap-3">
@@ -15,11 +15,11 @@
         </div>
       </div>
       <% if policy(@student).update? %>
-        <%= link_to "Editar", edit_student_path(@student), class: "btn-secondary text-sm" %>
+        <%= link_to "Editar", edit_student_path(@student), class: "btn-secondary text-sm sm:flex-shrink-0" %>
       <% end %>
     </div>
 
-    <dl class="mt-6 grid grid-cols-2 gap-4 text-sm">
+    <dl class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
       <div>
         <dt class="text-gray-500">CPF</dt>
         <dd class="font-medium"><%= @student.cpf.presence || "—" %></dd>

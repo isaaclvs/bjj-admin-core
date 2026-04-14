@@ -6,13 +6,13 @@
   </div>
 
   <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 space-y-5">
-    <div class="flex items-start justify-between">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
       <div>
         <h2 class="text-xl font-bold text-gray-900">Ficha de Saúde</h2>
         <p class="text-sm text-gray-500"><%= @student.name %></p>
       </div>
       <% if policy(@health_record).update? %>
-        <%= link_to "Editar", edit_student_health_record_path(@student), class: "btn-secondary text-sm" %>
+        <%= link_to "Editar", edit_student_health_record_path(@student), class: "btn-secondary text-sm sm:flex-shrink-0" %>
       <% end %>
     </div>
 

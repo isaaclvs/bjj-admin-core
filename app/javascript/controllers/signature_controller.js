@@ -35,8 +35,13 @@ export default class extends Controller {
   }
 
   #coords(event) {
-    const rect = this.canvasTarget.getBoundingClientRect()
-    const src  = event.touches?.[0] ?? event
-    return [src.clientX - rect.left, src.clientY - rect.top]
+    const rect   = this.canvasTarget.getBoundingClientRect()
+    const src    = event.touches?.[0] ?? event
+    const scaleX = this.canvasTarget.width / rect.width
+    const scaleY = this.canvasTarget.height / rect.height
+    return [
+      (src.clientX - rect.left) * scaleX,
+      (src.clientY - rect.top) * scaleY
+    ]
   }
 }

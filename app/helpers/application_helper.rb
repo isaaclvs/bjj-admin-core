@@ -4,9 +4,9 @@ module ApplicationHelper
   def nav_link(label, path, &block)
     active = current_page?(path)
     classes = if active
-      "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-indigo-600 text-white"
+      "flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium bg-indigo-600 text-white"
     else
-      "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-700/60 hover:text-white transition-colors"
+      "flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium text-gray-300 hover:bg-gray-700/60 hover:text-white transition-colors"
     end
 
     link_to path, class: classes do
