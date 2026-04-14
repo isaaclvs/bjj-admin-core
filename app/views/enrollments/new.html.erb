@@ -1,0 +1,42 @@
+<% content_for :title, "Nova Matrícula" %>
+
+<div class="max-w-xl space-y-5">
+  <div><%= link_to "← Alunos", students_path, class: "text-sm text-gray-500 hover:text-gray-700" %></div>
+
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+    <h2 class="text-xl font-bold text-gray-900 mb-5">Nova Matrícula</h2>
+
+    <%= form_with model: @enrollment, class: "space-y-5" do |f| %>
+      <%= render "shared/errors", object: @enrollment %>
+
+      <div>
+        <%= f.label :student_id, "Aluno", class: "form-label" %>
+        <%= f.collection_select :student_id, @students, :id, :name,
+              { prompt: "Selecione o aluno" },
+              class: "form-input" %>
+      </div>
+
+      <div>
+        <%= f.label :plan_id, "Plano", class: "form-label" %>
+        <%= f.collection_select :plan_id, @plans, :id, :name,
+              { prompt: "Selecione o plano" },
+              class: "form-input" %>
+      </div>
+
+      <div>
+        <%= f.label :started_at, "Data de início", class: "form-label" %>
+        <%= f.date_field :started_at, value: Date.today, class: "form-input" %>
+      </div>
+
+      <div>
+        <%= f.label :expires_at, "Data de vencimento (opcional)", class: "form-label" %>
+        <%= f.date_field :expires_at, class: "form-input" %>
+      </div>
+
+      <div class="flex items-center gap-3 pt-2">
+        <%= f.submit "Matricular", class: "btn-primary cursor-pointer" %>
+        <%= link_to "Cancelar", students_path, class: "btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<% content_for :title, "Nova Ficha de Saúde" %>
+
+<div class="max-w-2xl space-y-5">
+  <div class="flex items-center gap-3">
+    <%= link_to "← #{@student.name}", @student, class: "text-sm text-gray-500 hover:text-gray-700" %>
+  </div>
+
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+    <h2 class="text-xl font-bold text-gray-900 mb-5">Ficha de Saúde — <%= @student.name %></h2>
+    <%= render "form", student: @student, health_record: @health_record %>
+  </div>
+</div>

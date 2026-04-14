@@ -1,0 +1,62 @@
+<%= form_with model: student, class: "space-y-5" do |f| %>
+  <%= render "shared/errors", object: student %>
+
+  <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+    <div class="sm:col-span-2">
+      <%= f.label :name, "Nome completo", class: "form-label" %>
+      <%= f.text_field :name, class: "form-input", required: true %>
+    </div>
+
+    <div>
+      <%= f.label :cpf, "CPF", class: "form-label" %>
+      <%= f.text_field :cpf, class: "form-input", placeholder: "000.000.000-00" %>
+    </div>
+
+    <div>
+      <%= f.label :birth_date, "Data de Nascimento", class: "form-label" %>
+      <%= f.date_field :birth_date, class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :phone, "Telefone", class: "form-label" %>
+      <%= f.telephone_field :phone, class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :email, "Email", class: "form-label" %>
+      <%= f.email_field :email, class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :belt, "Faixa", class: "form-label" %>
+      <%= f.select :belt, Student.belts.keys.map { |b| [b.capitalize, b] },
+            {}, class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :status, "Status", class: "form-label" %>
+      <%= f.select :status, Student.statuses.keys.map { |s| [s.capitalize, s] },
+            {}, class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :emergency_contact_name, "Contato de Emergência", class: "form-label" %>
+      <%= f.text_field :emergency_contact_name, class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :emergency_contact_phone, "Telefone de Emergência", class: "form-label" %>
+      <%= f.telephone_field :emergency_contact_phone, class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :enrolled_at, "Data de Matrícula", class: "form-label" %>
+      <%= f.date_field :enrolled_at, class: "form-input" %>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3 pt-2">
+    <%= f.submit class: "btn-primary cursor-pointer" %>
+    <%= link_to "Cancelar", students_path, class: "btn-secondary" %>
+  </div>
+<% end %>

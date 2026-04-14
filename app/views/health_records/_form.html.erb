@@ -1,0 +1,84 @@
+<%= form_with model: [student, health_record], class: "space-y-5" do |f| %>
+  <%= render "shared/errors", object: health_record %>
+
+  <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+    <div>
+      <%= f.label :blood_type, "Tipo Sanguíneo", class: "form-label" %>
+      <%= f.select :blood_type,
+            %w[A+ A- B+ B- AB+ AB- O+ O-].map { |t| [t, t] }.unshift(["Não informado", ""]),
+            {}, class: "form-input" %>
+    </div>
+
+    <div class="flex items-center gap-3 pt-6">
+      <%= f.check_box :uses_medication, class: "w-4 h-4 text-indigo-600" %>
+      <%= f.label :uses_medication, "Usa medicação contínua", class: "text-sm text-gray-700" %>
+    </div>
+
+    <div class="sm:col-span-2">
+      <%= f.label :medication_notes, "Quais medicações?", class: "form-label" %>
+      <%= f.text_area :medication_notes, rows: 2, class: "form-input" %>
+    </div>
+
+    <div class="sm:col-span-2">
+      <%= f.label :comorbidities, "Comorbidades (uma por linha)", class: "form-label" %>
+      <%= f.text_area :comorbidities,
+            value: Array(health_record.comorbidities).join("\n"),
+            rows: 3, class: "form-input",
+            name: "health_record[comorbidities][]" %>
+      <p class="mt-1 text-xs text-gray-500">Ex: hipertensão, diabetes, asma</p>
+    </div>
+
+    <div class="sm:col-span-2">
+      <%= f.label :allergies, "Alergias (uma por linha)", class: "form-label" %>
+      <%= f.text_area :allergies,
+            value: Array(health_record.allergies).join("\n"),
+            rows: 2, class: "form-input",
+            name: "health_record[allergies][]" %>
+    </div>
+
+    <div class="sm:col-span-2">
+      <%= f.label :injuries, "Lesões/Cirurgias (uma por linha)", class: "form-label" %>
+      <%= f.text_area :injuries,
+            value: Array(health_record.injuries).join("\n"),
+            rows: 2, class: "form-input",
+            name: "health_record[injuries][]" %>
+    </div>
+
+    <div class="sm:col-span-2">
+      <%= f.label :risk_notes, "Observações de risco", class: "form-label" %>
+      <%= f.text_area :risk_notes, rows: 2, class: "form-input" %>
+    </div>
+  </div>
+
+  <%# Assinatura digital %>
+  <div data-controller="signature" class="space-y-2">
+    <p class="form-label">Assinatura Digital</p>
+    <canvas data-signature-target="canvas"
+            width="500" height="150"
+            class="border border-gray-300 rounded-lg cursor-crosshair bg-white w-full max-w-lg"
+            data-action="mousedown->signature#startDrawing mousemove->signature#draw mouseup->signature#stopDrawing mouseleave->signature#stopDrawing touchstart->signature#startDrawing touchmove->signature#draw touchend->signature#stopDrawing">
+    </canvas>
+    <button type="button" data-action="signature#clear"
+            class="text-xs text-gray-500 hover:text-gray-700">Limpar assinatura</button>
+    <%= f.hidden_field :signature_data, data: { signature_target: "input" } %>
+    <%= f.hidden_field :signed_at, value: Time.current %>
+  </div>
+
+  <%# LGPD Consent %>
+  <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 space-y-2">
+    <p class="text-sm font-medium text-gray-900">Consentimento LGPD</p>
+    <p class="text-xs text-gray-600">
+      Ao marcar esta opção, o aluno consente com o armazenamento dos seus dados pessoais
+      e de saúde pela academia, conforme a Lei Geral de Proteção de Dados (LGPD).
+    </p>
+    <label class="flex items-center gap-2 text-sm text-gray-700">
+      <%= f.check_box :lgpd_consent, class: "w-4 h-4 text-indigo-600" %>
+      Li e aceito os termos de uso e política de privacidade
+    </label>
+  </div>
+
+  <div class="flex items-center gap-3 pt-2">
+    <%= f.submit class: "btn-primary cursor-pointer" %>
+    <%= link_to "Cancelar", student_path(student), class: "btn-secondary" %>
+  </div>
+<% end %>

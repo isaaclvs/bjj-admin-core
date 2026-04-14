@@ -1,0 +1,24 @@
+<tr id="<%= dom_id(student) %>" class="hover:bg-gray-50 transition-colors">
+  <td class="td">
+    <%= link_to student.name, student, class: "font-medium text-indigo-600 hover:text-indigo-800" %>
+  </td>
+  <td class="td"><%= belt_badge(student.belt) %></td>
+  <td class="td"><%= status_badge(student.status) %></td>
+  <td class="td text-gray-500 text-sm"><%= student.phone.presence || "—" %></td>
+  <td class="td">
+    <% if student.health_record&.risk_flag? %>
+      <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">⚠️ Risco</span>
+    <% end %>
+  </td>
+  <td class="td text-right space-x-3">
+    <%= link_to "Ver", student, class: "text-sm text-indigo-600 hover:underline" %>
+    <% if policy(student).update? %>
+      <%= link_to "Editar", edit_student_path(student), class: "text-sm text-gray-600 hover:underline" %>
+    <% end %>
+    <% if policy(student).destroy? %>
+      <%= button_to "Remover", student, method: :delete,
+            data: { turbo_confirm: "Remover #{student.name}?" },
+            class: "text-sm text-red-600 hover:underline bg-transparent border-none p-0 cursor-pointer" %>
+    <% end %>
+  </td>
+</tr>

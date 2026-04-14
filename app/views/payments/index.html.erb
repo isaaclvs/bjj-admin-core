@@ -1,0 +1,43 @@
+<% content_for :title, "Pagamentos" %>
+
+<div class="space-y-5">
+  <div class="flex items-center justify-between">
+    <h2 class="text-2xl font-bold text-gray-900">Pagamentos</h2>
+    <% if @overdue_count > 0 %>
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+        <%= @overdue_count %> inadimplente<%= @overdue_count > 1 ? "s" : "" %>
+      </span>
+    <% end %>
+  </div>
+
+  <div id="payments-list" class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <% if @payments.any? %>
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="th">Aluno</th>
+            <th class="th">Plano</th>
+            <th class="th">Valor</th>
+            <th class="th">Vencimento</th>
+            <th class="th">Pago em</th>
+            <th class="th">Status</th>
+            <th class="th sr-only">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <% @payments.each do |payment| %>
+            <%= render "payment", payment: payment %>
+          <% end %>
+        </tbody>
+      </table>
+
+      <div class="px-4 py-3 border-t border-gray-200">
+        <%== pagy_nav(@pagy) %>
+      </div>
+    <% else %>
+      <div class="text-center py-12 text-gray-500">
+        <p>Nenhum pagamento registrado.</p>
+      </div>
+    <% end %>
+  </div>
+</div>

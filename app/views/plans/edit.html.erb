@@ -1,0 +1,9 @@
+<% content_for :title, "Editar Plano" %>
+
+<div class="max-w-xl space-y-5">
+  <div><%= link_to "← Planos", plans_path, class: "text-sm text-gray-500 hover:text-gray-700" %></div>
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+    <h2 class="text-xl font-bold text-gray-900 mb-5">Editar Plano</h2>
+    <%= render "form", plan: @plan %>
+  </div>
+</div>

@@ -1,0 +1,69 @@
+<% content_for :title, "Ficha de Saúde — #{@student.name}" %>
+
+<div class="max-w-3xl space-y-5">
+  <div class="flex items-center gap-3">
+    <%= link_to "← #{@student.name}", @student, class: "text-sm text-gray-500 hover:text-gray-700" %>
+  </div>
+
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 space-y-5">
+    <div class="flex items-start justify-between">
+      <div>
+        <h2 class="text-xl font-bold text-gray-900">Ficha de Saúde</h2>
+        <p class="text-sm text-gray-500"><%= @student.name %></p>
+      </div>
+      <% if policy(@health_record).update? %>
+        <%= link_to "Editar", edit_student_health_record_path(@student), class: "btn-secondary text-sm" %>
+      <% end %>
+    </div>
+
+    <% if @health_record.risk_flag? %>
+      <div class="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-800">
+        ⚠️ <strong>Atenção médica:</strong> <%= @health_record.risk_notes.presence || "Condição de risco identificada automaticamente." %>
+      </div>
+    <% end %>
+
+    <dl class="grid grid-cols-2 gap-5 text-sm">
+      <div>
+        <dt class="text-gray-500 font-medium">Tipo Sanguíneo</dt>
+        <dd class="mt-1"><%= @health_record.blood_type.presence || "—" %></dd>
+      </div>
+      <div>
+        <dt class="text-gray-500 font-medium">Usa Medicação</dt>
+        <dd class="mt-1"><%= @health_record.uses_medication? ? "Sim" : "Não" %></dd>
+      </div>
+      <% if @health_record.uses_medication? %>
+        <div class="col-span-2">
+          <dt class="text-gray-500 font-medium">Medicações</dt>
+          <dd class="mt-1"><%= @health_record.medication_notes.presence || "—" %></dd>
+        </div>
+      <% end %>
+      <div class="col-span-2">
+        <dt class="text-gray-500 font-medium">Comorbidades</dt>
+        <dd class="mt-1"><%= Array(@health_record.comorbidities).presence&.join(", ") || "Nenhuma" %></dd>
+      </div>
+      <div class="col-span-2">
+        <dt class="text-gray-500 font-medium">Alergias</dt>
+        <dd class="mt-1"><%= Array(@health_record.allergies).presence&.join(", ") || "Nenhuma" %></dd>
+      </div>
+      <div class="col-span-2">
+        <dt class="text-gray-500 font-medium">Lesões</dt>
+        <dd class="mt-1"><%= Array(@health_record.injuries).presence&.join(", ") || "Nenhuma" %></dd>
+      </div>
+    </dl>
+
+    <div class="border-t border-gray-200 pt-4 space-y-2 text-sm text-gray-500">
+      <% if @health_record.lgpd_consent? %>
+        <p>✓ Consentimento LGPD aceito em <%= @health_record.lgpd_consent_at&.strftime("%d/%m/%Y %H:%M") %></p>
+      <% end %>
+      <% if @health_record.signed_at? %>
+        <p>✓ Termo assinado em <%= @health_record.signed_at.strftime("%d/%m/%Y %H:%M") %></p>
+      <% end %>
+      <% if @health_record.signature_data? %>
+        <div>
+          <p class="font-medium text-gray-700 mb-1">Assinatura:</p>
+          <img src="<%= @health_record.signature_data %>" alt="Assinatura" class="border border-gray-200 rounded max-w-xs">
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

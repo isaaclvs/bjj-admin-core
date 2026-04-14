@@ -1,0 +1,3 @@
+<%= turbo_stream.replace @payment,
+      partial: "payments/payment",
+      locals: { payment: @payment } %>

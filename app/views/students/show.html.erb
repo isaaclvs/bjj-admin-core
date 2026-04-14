@@ -1,0 +1,121 @@
+<% content_for :title, @student.name %>
+
+<div class="space-y-6 max-w-3xl">
+  <div class="flex items-center gap-3">
+    <%= link_to "← Alunos", students_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+  </div>
+
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+    <div class="flex items-start justify-between">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900"><%= @student.name %></h2>
+        <div class="mt-2 flex items-center gap-3">
+          <%= belt_badge(@student.belt) %>
+          <%= status_badge(@student.status) %>
+        </div>
+      </div>
+      <% if policy(@student).update? %>
+        <%= link_to "Editar", edit_student_path(@student), class: "btn-secondary text-sm" %>
+      <% end %>
+    </div>
+
+    <dl class="mt-6 grid grid-cols-2 gap-4 text-sm">
+      <div>
+        <dt class="text-gray-500">CPF</dt>
+        <dd class="font-medium"><%= @student.cpf.presence || "—" %></dd>
+      </div>
+      <div>
+        <dt class="text-gray-500">Email</dt>
+        <dd class="font-medium"><%= @student.email.presence || "—" %></dd>
+      </div>
+      <div>
+        <dt class="text-gray-500">Telefone</dt>
+        <dd class="font-medium"><%= @student.phone.presence || "—" %></dd>
+      </div>
+      <div>
+        <dt class="text-gray-500">Data de Nascimento</dt>
+        <dd class="font-medium"><%= @student.birth_date&.strftime("%d/%m/%Y") || "—" %></dd>
+      </div>
+      <div>
+        <dt class="text-gray-500">Contato de Emergência</dt>
+        <dd class="font-medium"><%= @student.emergency_contact_name.presence || "—" %></dd>
+      </div>
+      <div>
+        <dt class="text-gray-500">Telefone Emergência</dt>
+        <dd class="font-medium"><%= @student.emergency_contact_phone.presence || "—" %></dd>
+      </div>
+    </dl>
+  </div>
+
+  <%# Health Record %>
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold text-gray-900">Ficha de Saúde</h3>
+      <% if @student.health_record %>
+        <%= link_to "Ver Ficha", student_health_record_path(@student), class: "btn-secondary text-sm" %>
+      <% elsif policy(HealthRecord.new(student: @student)).create? %>
+        <%= link_to "Criar Ficha", new_student_health_record_path(@student), class: "btn-primary text-sm" %>
+      <% end %>
+    </div>
+    <% if @student.health_record %>
+      <div class="flex items-center gap-3 text-sm">
+        <% if @student.health_record.risk_flag? %>
+          <span class="text-red-600 font-medium">⚠️ Aluno com risco médico</span>
+        <% else %>
+          <span class="text-green-600">✓ Sem condições de risco identificadas</span>
+        <% end %>
+        <% if @student.health_record.lgpd_consent? %>
+          <span class="text-gray-500">• LGPD aceito</span>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-sm text-gray-500">Ficha de saúde não preenchida.</p>
+    <% end %>
+  </div>
+
+  <%# Enrollments %>
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold text-gray-900">Matrículas</h3>
+      <%= link_to "Nova Matrícula", new_enrollment_path, class: "btn-secondary text-sm" %>
+    </div>
+    <% if @student.enrollments.any? %>
+      <div class="space-y-2">
+        <% @student.enrollments.includes(:plan).order(created_at: :desc).each do |enrollment| %>
+          <div class="flex items-center justify-between text-sm p-3 bg-gray-50 rounded-lg">
+            <div>
+              <span class="font-medium"><%= enrollment.plan.name %></span>
+              <span class="text-gray-500 ml-2">desde <%= enrollment.started_at.strftime("%d/%m/%Y") %></span>
+            </div>
+            <%= status_badge(enrollment.status) %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-sm text-gray-500">Sem matrículas ativas.</p>
+    <% end %>
+  </div>
+
+  <%# Payments %>
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold text-gray-900">Pagamentos Recentes</h3>
+      <%= link_to "Ver todos", payments_path, class: "text-sm text-indigo-600 hover:underline" %>
+    </div>
+    <% if @student.payments.any? %>
+      <div class="space-y-2">
+        <% @student.payments.order(due_date: :desc).limit(5).each do |payment| %>
+          <div class="flex items-center justify-between text-sm p-3 bg-gray-50 rounded-lg">
+            <div>
+              <span class="font-medium"><%= currency(payment.amount) %></span>
+              <span class="text-gray-500 ml-2">venc. <%= payment.due_date.strftime("%d/%m/%Y") %></span>
+            </div>
+            <%= status_badge(payment.status) %>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-sm text-gray-500">Sem pagamentos registrados.</p>
+    <% end %>
+  </div>
+</div>

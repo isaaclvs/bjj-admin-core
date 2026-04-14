@@ -1,0 +1,19 @@
+<tr id="<%= dom_id(payment) %>"
+    class="hover:bg-gray-50 transition-colors <%= payment.overdue? ? 'bg-red-50' : '' %>">
+  <td class="td">
+    <%= link_to payment.student.name, payment.student, class: "font-medium text-indigo-600 hover:text-indigo-800" %>
+  </td>
+  <td class="td text-sm text-gray-600">
+    <%= payment.enrollment&.plan&.name || "—" %>
+  </td>
+  <td class="td font-medium"><%= currency(payment.amount) %></td>
+  <td class="td text-sm text-gray-600"><%= payment.due_date.strftime("%d/%m/%Y") %></td>
+  <td class="td text-sm text-gray-600"><%= payment.paid_at&.strftime("%d/%m/%Y") || "—" %></td>
+  <td class="td"><%= status_badge(payment.status) %></td>
+  <td class="td text-right space-x-3">
+    <%= link_to "Editar", edit_payment_path(payment), class: "text-sm text-indigo-600 hover:underline" %>
+    <%= button_to "Remover", payment, method: :delete,
+          data: { turbo_confirm: "Remover este pagamento?" },
+          class: "text-sm text-red-600 hover:underline bg-transparent border-none p-0 cursor-pointer" %>
+  </td>
+</tr>

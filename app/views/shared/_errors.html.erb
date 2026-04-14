@@ -1,0 +1,12 @@
+<% if object.errors.any? %>
+  <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-800">
+    <p class="font-semibold mb-1">
+      <%= pluralize(object.errors.count, "erro encontrado", plural: "erros encontrados") %>:
+    </p>
+    <ul class="list-disc list-inside space-y-1">
+      <% object.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

@@ -1,0 +1,21 @@
+<% content_for :title, "Planos" %>
+
+<div class="space-y-5">
+  <div class="flex items-center justify-between">
+    <h2 class="text-2xl font-bold text-gray-900">Planos</h2>
+    <%= link_to "Novo Plano", new_plan_path, class: "btn-primary" %>
+  </div>
+
+  <div id="plans-list" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <% @plans.each do |plan| %>
+      <%= render "plan", plan: plan %>
+    <% end %>
+  </div>
+
+  <% if @plans.empty? %>
+    <div class="text-center py-12 bg-white rounded-xl border border-gray-200 text-gray-500">
+      <p>Nenhum plano cadastrado.</p>
+      <%= link_to "Criar primeiro plano", new_plan_path, class: "mt-2 text-indigo-600 hover:underline" %>
+    </div>
+  <% end %>
+</div>

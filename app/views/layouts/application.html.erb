@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title><%= content_for(:title) || "BJJ Admin Core" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-50 font-sans text-gray-900">
+    <% if user_signed_in? %>
+      <div class="flex h-screen overflow-hidden">
+        <%# Sidebar %>
+        <aside class="w-64 bg-gray-900 text-white flex flex-col flex-shrink-0">
+          <div class="px-6 py-5 border-b border-gray-700">
+            <h1 class="text-lg font-bold tracking-tight">BJJ Admin</h1>
+            <p class="text-xs text-gray-400 mt-0.5"><%= current_academy.name %></p>
+          </div>
+
+          <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+            <%= nav_link "Dashboard",   root_path,    icon: "🏠" %>
+            <%= nav_link "Alunos",      students_path, icon: "👥" %>
+            <%= nav_link "Planos",      plans_path,    icon: "📋" %>
+            <%= nav_link "Matrículas",  new_enrollment_path, icon: "📝" %>
+            <%= nav_link "Pagamentos",  payments_path, icon: "💰" %>
+          </nav>
+
+          <div class="px-4 py-4 border-t border-gray-700">
+            <p class="text-xs text-gray-400 truncate"><%= current_user.email %></p>
+            <p class="text-xs text-indigo-400 capitalize"><%= current_user.role %></p>
+            <%= button_to "Sair", destroy_user_session_path, method: :delete,
+                  class: "mt-2 text-xs text-gray-400 hover:text-white transition-colors" %>
+          </div>
+        </aside>
+
+        <%# Main content %>
+        <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+          <%# Flash messages %>
+          <div id="flash" class="px-6 pt-4 space-y-2">
+            <% flash.each do |type, message| %>
+              <div data-controller="alert"
+                   class="<%= flash_class(type) %> px-4 py-3 rounded-lg flex items-center justify-between">
+                <span><%= message %></span>
+                <button data-action="alert#dismiss" class="ml-4 text-current opacity-60 hover:opacity-100">✕</button>
+              </div>
+            <% end %>
+          </div>
+
+          <main class="flex-1 overflow-y-auto px-6 py-6">
+            <%= yield %>
+          </main>
+        </div>
+      </div>
+    <% else %>
+      <div class="min-h-screen flex items-center justify-center bg-gray-100">
+        <div class="w-full max-w-md">
+          <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">BJJ Admin Core</h1>
+            <p class="text-gray-500 mt-1">Gestão administrativa para academias de jiu-jitsu</p>
+          </div>
+
+          <div id="flash" class="mb-4 space-y-2">
+            <% flash.each do |type, message| %>
+              <div class="<%= flash_class(type) %> px-4 py-3 rounded-lg">
+                <%= message %>
+              </div>
+            <% end %>
+          </div>
+
+          <%= yield %>
+        </div>
+      </div>
+    <% end %>
+  </body>
+</html>

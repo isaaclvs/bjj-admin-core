@@ -1,0 +1,78 @@
+<% content_for :title, "Alunos" %>
+
+<div class="space-y-5">
+  <div class="flex items-center justify-between">
+    <h2 class="text-2xl font-bold text-gray-900">Alunos</h2>
+    <% if policy(Student).create? %>
+      <%= link_to "Novo Aluno", new_student_path, class: "btn-primary" %>
+    <% end %>
+  </div>
+
+  <%# Filters %>
+  <%= turbo_frame_tag "students-filter" do %>
+    <%= form_with url: students_path, method: :get,
+          data: { controller: "filter", filter_url_value: students_path },
+          class: "bg-white rounded-xl border border-gray-200 p-4 shadow-sm" do |f| %>
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-4">
+        <%= f.text_field :q,
+              value: params[:q],
+              placeholder: "Buscar por nome...",
+              class: "form-input",
+              data: { filter_target: "input" } %>
+
+        <%= f.select :belt,
+              Student.belts.keys.map { |b| [b.capitalize, b] }.unshift(["Todas as faixas", ""]),
+              { selected: params[:belt] },
+              class: "form-input", data: { filter_target: "input" } %>
+
+        <%= f.select :status,
+              Student.statuses.keys.map { |s| [s.capitalize, s] }.unshift(["Todos os status", ""]),
+              { selected: params[:status] },
+              class: "form-input", data: { filter_target: "input" } %>
+
+        <label class="flex items-center gap-2 text-sm text-gray-600">
+          <%= f.check_box :at_risk, checked: params[:at_risk] == "1",
+                data: { filter_target: "input" } %>
+          Risco médico
+        </label>
+      </div>
+
+      <%= turbo_frame_tag "students-list-frame", data: { filter_target: "frame" } %>
+    <% end %>
+  <% end %>
+
+  <%= turbo_frame_tag "students-list-frame" do %>
+    <div id="students-list" class="mt-4 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      <% if @students.any? %>
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="th">Nome</th>
+              <th class="th">Faixa</th>
+              <th class="th">Status</th>
+              <th class="th">Telefone</th>
+              <th class="th">Risco</th>
+              <th class="th sr-only">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <% @students.each do |student| %>
+              <%= render "students/student", student: student %>
+            <% end %>
+          </tbody>
+        </table>
+
+        <div class="px-4 py-3 border-t border-gray-200">
+          <%== pagy_nav(@pagy) %>
+        </div>
+      <% else %>
+        <div class="text-center py-12 text-gray-500">
+          <p class="text-lg">Nenhum aluno encontrado.</p>
+          <% if policy(Student).create? %>
+            <%= link_to "Cadastrar primeiro aluno", new_student_path, class: "mt-2 text-indigo-600 hover:underline" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

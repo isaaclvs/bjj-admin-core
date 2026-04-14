@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <title><%= content_for(:title) || "Ficha de Inscrição" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-50 font-sans text-gray-900 min-h-screen">
+    <div class="max-w-2xl mx-auto px-4 py-8">
+      <div class="text-center mb-8">
+        <h1 class="text-2xl font-bold text-gray-900">Ficha de Inscrição</h1>
+        <% if @academy %>
+          <p class="text-gray-600 mt-1"><%= @academy.name %></p>
+        <% end %>
+      </div>
+
+      <div id="flash" class="mb-6 space-y-2">
+        <% flash.each do |type, message| %>
+          <div class="<%= flash_class(type) %> px-4 py-3 rounded-lg">
+            <%= message %>
+          </div>
+        <% end %>
+      </div>
+
+      <%= yield %>
+    </div>
+  </body>
+</html>

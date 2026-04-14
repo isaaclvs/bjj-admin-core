@@ -1,0 +1,44 @@
+<%= form_with model: payment, class: "space-y-5" do |f| %>
+  <%= render "shared/errors", object: payment %>
+
+  <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+    <div>
+      <%= f.label :amount_cents, "Valor (centavos)", class: "form-label" %>
+      <%= f.number_field :amount_cents, class: "form-input", min: 1 %>
+    </div>
+
+    <div>
+      <%= f.label :due_date, "Vencimento", class: "form-label" %>
+      <%= f.date_field :due_date, class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :status, "Status", class: "form-label" %>
+      <%= f.select :status,
+            Payment.statuses.keys.map { |s| [s.capitalize, s] },
+            {}, class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :method, "Método", class: "form-label" %>
+      <%= f.select :method,
+            Payment.methods.keys.map { |m| [m.capitalize, m] },
+            {}, class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :paid_at, "Data do pagamento", class: "form-label" %>
+      <%= f.date_field :paid_at, class: "form-input" %>
+    </div>
+
+    <div class="sm:col-span-2">
+      <%= f.label :notes, "Observações", class: "form-label" %>
+      <%= f.text_area :notes, rows: 2, class: "form-input" %>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3 pt-2">
+    <%= f.submit class: "btn-primary cursor-pointer" %>
+    <%= link_to "Cancelar", payments_path, class: "btn-secondary" %>
+  </div>
+<% end %>
