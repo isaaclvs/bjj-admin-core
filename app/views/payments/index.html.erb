@@ -12,24 +12,26 @@
 
   <div id="payments-list" class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
     <% if @payments.any? %>
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="th">Aluno</th>
-            <th class="th">Plano</th>
-            <th class="th">Valor</th>
-            <th class="th">Vencimento</th>
-            <th class="th">Pago em</th>
-            <th class="th">Status</th>
-            <th class="th sr-only">Ações</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-100">
-          <% @payments.each do |payment| %>
-            <%= render "payment", payment: payment %>
-          <% end %>
-        </tbody>
-      </table>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="th">Aluno</th>
+              <th class="th">Plano</th>
+              <th class="th">Valor</th>
+              <th class="th">Vencimento</th>
+              <th class="th">Pago em</th>
+              <th class="th">Status</th>
+              <th class="th sr-only">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <% @payments.each do |payment| %>
+              <%= render "payment", payment: payment %>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
 
       <div class="px-4 py-3 border-t border-gray-200">
         <%== pagy_nav(@pagy) %>
