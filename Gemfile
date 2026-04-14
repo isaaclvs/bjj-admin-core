@@ -37,6 +37,7 @@ group :development, :test do
   gem "shoulda-matchers"
   gem "pundit-matchers"
   gem "simplecov", require: false
+  gem "rspec_junit_formatter"
 end
 
 group :development do

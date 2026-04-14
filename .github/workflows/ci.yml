@@ -3,65 +3,111 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
+  # ─── Testes ──────────────────────────────────────────────────────────────
+  test:
+    name: RSpec
+    runs-on: ubuntu-latest
+
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: sqlite3:db/test.sqlite3
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Set up database
+        run: bin/rails db:schema:load
+
+      - name: Run tests
+        run: bundle exec rspec --format progress --format RspecJunitFormatter --out tmp/rspec.xml
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 7
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rspec-results
+          path: tmp/rspec.xml
+          retention-days: 7
+
+  # ─── Segurança Ruby ──────────────────────────────────────────────────────
   scan_ruby:
+    name: Brakeman + bundler-audit
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
 
-      - name: Scan for common Rails security vulnerabilities using static analysis
+      - name: Brakeman
         run: bin/brakeman --no-pager
-      
-      - name: Scan for known security vulnerabilities in gems used
-        run: bin/bundler-audit
-      
+
+      - name: bundler-audit
+        run: bin/bundler-audit --update
+
+  # ─── Segurança JS ────────────────────────────────────────────────────────
   scan_js:
+    name: importmap audit
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
 
-      - name: Scan for security vulnerabilities in JavaScript dependencies
+      - name: importmap audit
         run: bin/importmap audit
 
+  # ─── Lint ─────────────────────────────────────────────────────────────────
   lint:
+    name: RuboCop
     runs-on: ubuntu-latest
+
     env:
       RUBOCOP_CACHE_ROOT: tmp/rubocop
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
 
-      - name: Prepare RuboCop cache
+      - name: RuboCop cache
         uses: actions/cache@v4
         env:
-          DEPENDENCIES_HASH: ${{ hashFiles('.ruby-version', '**/.rubocop.yml', '**/.rubocop_todo.yml', 'Gemfile.lock') }}
+          DEPS: ${{ hashFiles('.ruby-version', '**/.rubocop.yml', '**/.rubocop_todo.yml', 'Gemfile.lock') }}
         with:
           path: ${{ env.RUBOCOP_CACHE_ROOT }}
-          key: rubocop-${{ runner.os }}-${{ env.DEPENDENCIES_HASH }}-${{ github.ref_name == github.event.repository.default_branch && github.run_id || 'default' }}
-          restore-keys: |
-            rubocop-${{ runner.os }}-${{ env.DEPENDENCIES_HASH }}-
+          key: rubocop-${{ runner.os }}-${{ env.DEPS }}-${{ github.ref_name == github.event.repository.default_branch && github.run_id || 'default' }}
+          restore-keys: rubocop-${{ runner.os }}-${{ env.DEPS }}-
 
-      - name: Lint code for consistent style
+      - name: RuboCop
         run: bin/rubocop -f github
-
