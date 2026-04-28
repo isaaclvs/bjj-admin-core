@@ -20,7 +20,7 @@ gem "image_processing", "~> 1.2"
 
 gem "devise"
 gem "pundit"
-gem "pagy", "~> 8.0"
+gem "pagy", "~> 43.5"
 gem "matrix"
 gem "prawn"
 gem "prawn-table"
