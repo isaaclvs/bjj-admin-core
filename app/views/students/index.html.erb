@@ -10,7 +10,7 @@
 
   <%# Filters + list wrapped in one controller so frameTarget is in scope %>
   <%= form_with url: students_path, method: :get,
-        data: { controller: "filter", filter_url_value: students_path },
+        data: { controller: "filter", turbo_frame: "students-list-frame" },
         class: "space-y-4" do |f| %>
 
     <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
@@ -19,27 +19,27 @@
               value: params[:q],
               placeholder: "Buscar por nome...",
               class: "form-input",
-              data: { filter_target: "input" } %>
+              data: { action: "input->filter#submitWithDebounce" } %>
 
         <%= f.select :belt,
               Student.belts.keys.map { |b| [t("enums.student.belt.#{b}"), b] }.unshift(["Todas as faixas", ""]),
               { selected: params[:belt] },
-              class: "form-input", data: { filter_target: "input" } %>
+              class: "form-input", data: { action: "change->filter#submitImmediately" } %>
 
         <%= f.select :status,
               Student.statuses.keys.map { |s| [t("enums.status.#{s}"), s] }.unshift(["Todos os status", ""]),
               { selected: params[:status] },
-              class: "form-input", data: { filter_target: "input" } %>
+              class: "form-input", data: { action: "change->filter#submitImmediately" } %>
 
         <label class="flex items-center gap-2 text-sm text-gray-600">
           <%= f.check_box :at_risk, checked: params[:at_risk] == "1",
-                data: { filter_target: "input" } %>
+                data: { action: "change->filter#submitImmediately" } %>
           Risco médico
         </label>
       </div>
     </div>
 
-    <%= turbo_frame_tag "students-list-frame", data: { filter_target: "frame" } do %>
+    <%= turbo_frame_tag "students-list-frame" do %>
       <div id="students-list" class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <% if @students.any? %>
           <div class="overflow-x-auto">

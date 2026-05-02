@@ -1,20 +1,22 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["input", "frame"]
-  static values  = { url: String, delay: { type: Number, default: 300 } }
+  static values = { delay: { type: Number, default: 300 } }
 
   connect() {
-    this.debouncedFilter = this.#debounce(this.filter.bind(this), this.delayValue)
+    this.debouncedSubmit = this.#debounce(() => this.submit(), this.delayValue)
   }
 
-  filter() {
-    const params = new URLSearchParams(new FormData(this.element))
-    this.frameTarget.src = `${this.urlValue}?${params}`
+  submit() {
+    this.element.requestSubmit()
   }
 
-  inputTargetConnected(target) {
-    target.addEventListener("input", this.debouncedFilter)
+  submitWithDebounce() {
+    this.debouncedSubmit()
+  }
+
+  submitImmediately() {
+    this.submit()
   }
 
   #debounce(fn, delay) {
