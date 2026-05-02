@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: bjj_admin_production
+      POSTGRES_USER: bjj_admin
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bjj_admin -d bjj_admin_production"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://bjj_admin:${POSTGRES_PASSWORD}@db/bjj_admin_production
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY:?RAILS_MASTER_KEY is required}
+      MAILER_FROM: ${MAILER_FROM:-no-reply@bjjadmin.com.br}
+    volumes:
+      - storage:/rails/storage
+      - assets:/rails/public/assets
+    ports:
+      - "${PORT:-80}:80"
+
+  worker:
+    build: .
+    restart: unless-stopped
+    command: bin/rails solid_queue:start
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://bjj_admin:${POSTGRES_PASSWORD}@db/bjj_admin_production
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY:?RAILS_MASTER_KEY is required}
+
+volumes:
+  postgres_data:
+  storage:
+  assets:
