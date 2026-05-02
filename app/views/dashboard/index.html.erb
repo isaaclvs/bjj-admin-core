@@ -4,36 +4,39 @@
   <h2 class="text-2xl font-bold text-gray-900">Dashboard</h2>
 
   <%# KPI Cards %>
-  <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+  <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 <%= current_user.owner? ? "lg:grid-cols-4" : "lg:grid-cols-2" %>">
     <%= render "dashboard/kpi_card",
          label: "Alunos Ativos",
          value: @students_count,
          color: "blue" %>
 
     <%= render "dashboard/kpi_card",
-         label: "Inadimplentes",
-         value: @overdue_count,
-         color: "red" %>
-
-    <%= render "dashboard/kpi_card",
-         label: "Receita do Mês",
-         value: currency(@revenue_month),
-         color: "green" %>
-
-    <%= render "dashboard/kpi_card",
          label: "Alunos em Risco",
          value: @risk_students.count,
          color: "yellow" %>
+
+    <% if current_user.owner? %>
+      <%= render "dashboard/kpi_card",
+           label: "Inadimplentes",
+           value: @overdue_count,
+           color: "red" %>
+
+      <%= render "dashboard/kpi_card",
+           label: "Receita do Mês",
+           value: currency(@revenue_month),
+           color: "green" %>
+    <% end %>
   </div>
 
   <%# Quick actions %>
   <div class="flex gap-3 flex-wrap">
-    <%= link_to "Novo Aluno", new_student_path,
-          class: "btn-primary" %>
-    <%= link_to "Nova Matrícula", new_enrollment_path,
-          class: "btn-secondary" %>
-    <%= link_to "Ver Inadimplência", payments_path,
-          class: "btn-secondary" %>
+    <% if policy(Student.new(academy: current_academy)).create? %>
+      <%= link_to "Novo Aluno", new_student_path, class: "btn-primary" %>
+    <% end %>
+    <% if current_user.owner? %>
+      <%= link_to "Nova Matrícula", new_enrollment_path, class: "btn-secondary" %>
+      <%= link_to "Ver Inadimplência", payments_path, class: "btn-secondary" %>
+    <% end %>
   </div>
 
   <%# Risk students %>
