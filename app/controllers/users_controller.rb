@@ -13,6 +13,7 @@ class UsersController < ApplicationController
 
   def create
     @user = current_academy.users.new(user_params)
+    @user.role = params.dig(:user, :role).presence_in(%w[teacher owner]) || "teacher"
     @user.password = SecureRandom.hex(12)
     authorize @user
 
@@ -40,6 +41,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:email, :role)
+    params.require(:user).permit(:email)
   end
 end
