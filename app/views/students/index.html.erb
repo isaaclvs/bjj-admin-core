@@ -8,11 +8,12 @@
     <% end %>
   </div>
 
-  <%# Filters %>
-  <%= turbo_frame_tag "students-filter" do %>
-    <%= form_with url: students_path, method: :get,
-          data: { controller: "filter", filter_url_value: students_path },
-          class: "bg-white rounded-xl border border-gray-200 p-4 shadow-sm" do |f| %>
+  <%# Filters + list wrapped in one controller so frameTarget is in scope %>
+  <%= form_with url: students_path, method: :get,
+        data: { controller: "filter", filter_url_value: students_path },
+        class: "space-y-4" do |f| %>
+
+    <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-4">
         <%= f.text_field :q,
               value: params[:q],
@@ -36,45 +37,45 @@
           Risco médico
         </label>
       </div>
-
-      <%= turbo_frame_tag "students-list-frame", data: { filter_target: "frame" } %>
-    <% end %>
-  <% end %>
-
-  <%= turbo_frame_tag "students-list-frame" do %>
-    <div id="students-list" class="mt-4 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-      <% if @students.any? %>
-        <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th class="th">Nome</th>
-              <th class="th">Faixa</th>
-              <th class="th">Status</th>
-              <th class="th">Telefone</th>
-              <th class="th">Risco</th>
-              <th class="th sr-only">Ações</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-100">
-            <% @students.each do |student| %>
-              <%= render "students/student", student: student %>
-            <% end %>
-          </tbody>
-        </table>
-        </div>
-
-        <div class="px-4 py-3 border-t border-gray-200">
-          <%== pagy_nav(@pagy) %>
-        </div>
-      <% else %>
-        <div class="text-center py-12 text-gray-500">
-          <p class="text-lg">Nenhum aluno encontrado.</p>
-          <% if policy(Student).create? %>
-            <%= link_to "Cadastrar primeiro aluno", new_student_path, class: "mt-2 text-indigo-600 hover:underline" %>
-          <% end %>
-        </div>
-      <% end %>
     </div>
+
+    <%= turbo_frame_tag "students-list-frame", data: { filter_target: "frame" } do %>
+      <div id="students-list" class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <% if @students.any? %>
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="th">Nome</th>
+                  <th class="th">Faixa</th>
+                  <th class="th">Status</th>
+                  <th class="th">Telefone</th>
+                  <th class="th">Risco</th>
+                  <th class="th sr-only">Ações</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                <% @students.each do |student| %>
+                  <%= render "students/student", student: student %>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="px-4 py-3 border-t border-gray-200">
+            <%== pagy_nav(@pagy) %>
+          </div>
+        <% else %>
+          <div class="text-center py-12 text-gray-500">
+            <p class="text-lg">Nenhum aluno encontrado.</p>
+            <% if policy(Student).create? %>
+              <%= link_to "Cadastrar primeiro aluno", new_student_path,
+                    class: "mt-2 text-indigo-600 hover:underline",
+                    data: { turbo_frame: "_top" } %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   <% end %>
 </div>
