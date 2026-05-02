@@ -5,7 +5,7 @@ RSpec.describe Student, type: :model do
     it { is_expected.to belong_to(:academy) }
     it { is_expected.to have_one(:health_record).dependent(:destroy) }
     it { is_expected.to have_many(:enrollments).dependent(:destroy) }
-    it { is_expected.to have_many(:payments).dependent(:destroy) }
+    it { is_expected.to have_many(:payments).through(:enrollments) }
   end
 
   describe "validations" do

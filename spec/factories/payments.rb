@@ -1,7 +1,6 @@
 FactoryBot.define do
   factory :payment do
     association :enrollment
-    association :student
     amount_cents { 15000 }
     due_date     { Date.today + 30 }
     status       { :pending }

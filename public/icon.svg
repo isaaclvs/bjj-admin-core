@@ -1,3 +1,25 @@
-<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="256" cy="256" r="256" fill="red"/>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#4338ca"/>
+    </linearGradient>
+  </defs>
+
+  <!-- App icon background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+
+  <!-- Gi collar: left lapel -->
+  <path d="M 90 60 L 256 295" stroke="white" stroke-width="58" fill="none"
+        stroke-linecap="round"/>
+
+  <!-- Gi collar: right lapel -->
+  <path d="M 422 60 L 256 295" stroke="white" stroke-width="58" fill="none"
+        stroke-linecap="round"/>
+
+  <!-- Belt -->
+  <rect x="88" y="355" width="336" height="68" rx="34" fill="white"/>
+
+  <!-- Belt tip (black end) -->
+  <rect x="370" y="355" width="54" height="68" rx="34" fill="#1e1b4b"/>
 </svg>

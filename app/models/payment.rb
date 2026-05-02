@@ -1,6 +1,6 @@
 class Payment < ApplicationRecord
   belongs_to :enrollment
-  belongs_to :student
+  delegate :student, to: :enrollment
 
   enum :method, { pix: 0, cash: 1, card: 2, other: 3 }
   enum :status, { pending: 0, paid: 1, overdue: 2, cancelled: 3 }
@@ -10,7 +10,7 @@ class Payment < ApplicationRecord
 
   scope :overdue, -> {
     where(status: :overdue)
-      .or(where(status: :pending).where(due_date: ..Date.today))
+      .or(where(status: :pending).where(due_date: ..Time.current.to_date))
   }
   scope :paid_this_month, -> { paid.where(paid_at: Date.current.beginning_of_month..) }
 
@@ -23,7 +23,7 @@ class Payment < ApplicationRecord
   private
 
   def mark_overdue_if_past_due
-    return unless pending? && due_date < Date.today
+    return unless pending? && due_date < Time.current.to_date
     self.status = :overdue
   end
 end

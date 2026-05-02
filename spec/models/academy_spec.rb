@@ -5,7 +5,7 @@ RSpec.describe Academy, type: :model do
     it { is_expected.to have_many(:users).dependent(:destroy) }
     it { is_expected.to have_many(:students).dependent(:destroy) }
     it { is_expected.to have_many(:plans).dependent(:destroy) }
-    it { is_expected.to have_many(:payments).through(:students) }
+    it { is_expected.to have_many(:payments).through(:enrollments) }
   end
 
   describe "validations" do

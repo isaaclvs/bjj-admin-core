@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_13_224800) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_02_034031) do
   create_table "academies", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -69,10 +69,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_224800) do
     t.text "notes"
     t.date "paid_at"
     t.integer "status", default: 0, null: false
-    t.integer "student_id", null: false
     t.datetime "updated_at", null: false
     t.index ["enrollment_id"], name: "index_payments_on_enrollment_id"
-    t.index ["student_id"], name: "index_payments_on_student_id"
   end
 
   create_table "plans", force: :cascade do |t|
@@ -124,7 +122,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_13_224800) do
   add_foreign_key "health_records", "students"
   add_foreign_key "notification_logs", "students"
   add_foreign_key "payments", "enrollments"
-  add_foreign_key "payments", "students"
   add_foreign_key "plans", "academies"
   add_foreign_key "students", "academies"
   add_foreign_key "users", "academies"

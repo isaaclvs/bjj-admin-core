@@ -4,7 +4,7 @@ class Student < ApplicationRecord
   belongs_to :academy
   has_one :health_record, dependent: :destroy
   has_many :enrollments, dependent: :destroy
-  has_many :payments, dependent: :destroy
+  has_many :payments, through: :enrollments
   has_many :notification_logs, dependent: :destroy
   has_many :plans, through: :enrollments
 
@@ -15,7 +15,7 @@ class Student < ApplicationRecord
   validates :cpf, uniqueness: { scope: :academy_id }, allow_blank: true
 
   scope :with_overdue_payments, -> {
-    joins(:payments).where(payments: { status: :overdue }).distinct
+    joins(enrollments: :payments).where(payments: { status: :overdue }).distinct
   }
 
   scope :at_risk, -> { joins(:health_record).where(health_records: { risk_flag: true }) }

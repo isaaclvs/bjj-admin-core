@@ -6,10 +6,10 @@ class OverduePaymentsQuery
 
   def call
     @relation
-      .joins(student: :academy)
+      .joins(enrollment: { student: :academy })
       .where(academies: { id: @academy.id })
       .overdue
-      .includes(:student, :enrollment)
+      .includes(enrollment: [ :student, :plan ])
       .order(:due_date)
   end
 end

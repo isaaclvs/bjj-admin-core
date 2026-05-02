@@ -10,7 +10,9 @@ class EnrollmentsController < ApplicationController
     @enrollment = Enrollment.new(enrollment_params)
     authorize @enrollment
 
-    unless current_academy.students.exists?(@enrollment.student_id)
+    unless tenant_valid?
+      @students = current_academy.students.active.order(:name)
+      @plans    = current_academy.plans.active.order(:name)
       return render :new, status: :unprocessable_entity
     end
 
@@ -41,5 +43,10 @@ class EnrollmentsController < ApplicationController
 
   def enrollment_params
     params.require(:enrollment).permit(:student_id, :plan_id, :started_at, :expires_at)
+  end
+
+  def tenant_valid?
+    current_academy.students.exists?(@enrollment.student_id) &&
+      current_academy.plans.exists?(@enrollment.plan_id)
   end
 end

@@ -3,7 +3,14 @@ require "rails_helper"
 RSpec.describe Payment, type: :model do
   describe "associations" do
     it { is_expected.to belong_to(:enrollment) }
-    it { is_expected.to belong_to(:student) }
+  end
+
+  describe "delegations" do
+    it "delegates student to enrollment" do
+      enrollment = create(:enrollment)
+      payment = enrollment.payments.first
+      expect(payment.student).to eq(enrollment.student)
+    end
   end
 
   describe "validations" do
@@ -26,7 +33,7 @@ RSpec.describe Payment, type: :model do
     it "marks payment as overdue when due_date is in the past" do
       enrollment = create(:enrollment)
       payment = enrollment.payments.first
-      payment.update!(due_date: Date.today - 1, status: :pending)
+      payment.update!(due_date: Time.current.to_date - 1, status: :pending)
       payment.save!
       expect(payment.reload.status).to eq("overdue")
     end

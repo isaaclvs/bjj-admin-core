@@ -13,7 +13,6 @@ class Enrollment < ApplicationRecord
 
   def generate_first_payment
     payments.create!(
-      student: student,
       amount_cents: plan.price_cents,
       due_date: started_at,
       status: :pending

@@ -1,0 +1,10 @@
+Olá, <%= @student.name %>!
+
+Identificamos um pagamento em atraso na <%= @academy.name %>.
+
+Valor:      R$ <%= "%.2f" % @payment.amount %>
+Vencimento: <%= @payment.due_date.strftime("%d/%m/%Y") %>
+
+Entre em contato com a academia para regularizar sua situação e evitar a suspensão da matrícula.
+
+<%= @academy.name %>

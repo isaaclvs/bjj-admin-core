@@ -30,6 +30,18 @@ RSpec.describe PaymentReminderJob, type: :job do
       expect(log.sent_at).to be_within(5.seconds).of(Time.current)
     end
 
+    it "isolates notifications per academy — does not notify other academies" do
+      other_student    = create(:student)
+      other_plan       = create(:plan, academy: other_student.academy)
+      other_enrollment = create(:enrollment, student: other_student, plan: other_plan)
+      other_enrollment.payments.first.update_columns(due_date: Date.today - 5, status: 2)
+      overdue_payment
+
+      expect { described_class.new.perform }
+        .to change(NotificationLog, :count).by(2)
+      expect(NotificationLog.pluck(:student_id)).to contain_exactly(student.id, other_student.id)
+    end
+
     it "does not create a second notification if already notified today" do
       overdue_payment
       described_class.new.perform
@@ -37,20 +49,27 @@ RSpec.describe PaymentReminderJob, type: :job do
         .not_to change(NotificationLog, :count)
     end
 
-    it "does not create a notification for paid payments" do
-      payment = enrollment.payments.first
-      payment.update_columns(status: 1, paid_at: Date.today)
-
+    it "enqueues a reminder email when student has an email" do
+      overdue_payment
       expect { described_class.new.perform }
-        .not_to change(NotificationLog, :count)
+        .to have_enqueued_mail(PaymentReminderMailer, :reminder)
+    end
+
+    it "does not enqueue an email when student has no email" do
+      student.update!(email: nil)
+      overdue_payment
+      expect { described_class.new.perform }
+        .not_to have_enqueued_mail(PaymentReminderMailer, :reminder)
+    end
+
+    it "does not create a notification for paid payments" do
+      enrollment.payments.first.update_columns(status: 1, paid_at: Date.today)
+      expect { described_class.new.perform }.not_to change(NotificationLog, :count)
     end
 
     it "does not create a notification for pending future payments" do
-      payment = enrollment.payments.first
-      payment.update_columns(due_date: Date.today + 30, status: 0)
-
-      expect { described_class.new.perform }
-        .not_to change(NotificationLog, :count)
+      enrollment.payments.first.update_columns(due_date: Date.today + 30, status: 0)
+      expect { described_class.new.perform }.not_to change(NotificationLog, :count)
     end
   end
 end

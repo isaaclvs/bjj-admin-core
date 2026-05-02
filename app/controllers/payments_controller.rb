@@ -5,7 +5,7 @@ class PaymentsController < ApplicationController
     authorize Payment
     @pagy, @payments = pagy(
       current_academy.payments
-        .includes(:student, enrollment: :plan)
+        .includes(enrollment: [ :plan, :student ])
         .order(due_date: :asc)
     )
     @overdue_count = OverduePaymentsQuery.new(current_academy).call.count
