@@ -7,9 +7,11 @@ Rails.application.routes.draw do
     resource :health_record, only: %i[show new create edit update]
   end
 
-  resources :plans
-  resources :enrollments, only: %i[new create destroy]
-  resources :payments, only: %i[index show edit update destroy]
+  resources :plans, except: %i[show]
+  resources :enrollments, only: %i[index new create destroy]
+  resources :payments, except: %i[show]
+  resources :users, only: %i[index new create destroy]
+  resource  :academy, only: %i[edit update]
 
   namespace :public do
     get  "/:academy_slug", to: "registrations#new",    as: :registration

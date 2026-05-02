@@ -9,7 +9,7 @@ class StudentsFilterQuery
     scope = filter_by_belt(scope)
     scope = filter_by_status(scope)
     scope = filter_by_risk(scope)
-    search(scope)
+    search(scope).order(:name)
   end
 
   private

@@ -11,8 +11,12 @@ class Student < ApplicationRecord
   enum :belt, { white: 0, blue: 1, purple: 2, brown: 3, black: 4 }
   enum :status, { active: 0, inactive: 1, suspended: 2 }
 
+  CPF_FORMAT = /\A\d{3}\.?\d{3}\.?\d{3}-?\d{2}\z/
+
   validates :name, presence: true
-  validates :cpf, uniqueness: { scope: :academy_id }, allow_blank: true
+  validates :cpf, uniqueness: { scope: :academy_id },
+                  format: { with: CPF_FORMAT, message: "formato inválido (000.000.000-00)" },
+                  allow_blank: true
 
   scope :with_overdue_payments, -> {
     joins(enrollments: :payments).where(payments: { status: :overdue }).distinct

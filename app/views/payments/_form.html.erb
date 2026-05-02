@@ -2,6 +2,16 @@
   <%= render "shared/errors", object: payment %>
 
   <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+    <% if payment.new_record? %>
+      <div class="sm:col-span-2">
+        <%= f.label :enrollment_id, "Matrícula (aluno / plano)", class: "form-label" %>
+        <%= f.collection_select :enrollment_id, @enrollments, :id,
+              ->(e) { "#{e.student.name} — #{e.plan.name}" },
+              { prompt: "Selecione a matrícula" },
+              class: "form-input" %>
+      </div>
+    <% end %>
+
     <div>
       <%= f.label :amount_cents, "Valor (centavos)", class: "form-label" %>
       <%= f.number_field :amount_cents, class: "form-input", min: 1 %>

@@ -1,5 +1,5 @@
 class PaymentsController < ApplicationController
-  before_action :set_payment, only: %i[show edit update destroy]
+  before_action :set_payment, only: %i[edit update destroy]
 
   def index
     authorize Payment
@@ -11,7 +11,31 @@ class PaymentsController < ApplicationController
     @overdue_count = OverduePaymentsQuery.new(current_academy).call.count
   end
 
-  def show
+  def new
+    @payment = Payment.new
+    authorize @payment
+    @enrollments = current_academy.enrollments.active
+                                  .includes(:student, :plan)
+                                  .order("students.name")
+  end
+
+  def create
+    @payment = Payment.new(payment_params)
+    authorize @payment
+
+    unless current_academy.enrollments.exists?(@payment.enrollment_id)
+      @enrollments = current_academy.enrollments.active.includes(:student, :plan).order("students.name")
+      return render :new, status: :unprocessable_entity
+    end
+
+    if @payment.save
+      respond_to do |format|
+        format.html { redirect_to payments_path, notice: "Pagamento registrado." }
+      end
+    else
+      @enrollments = current_academy.enrollments.active.includes(:student, :plan).order("students.name")
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def edit
@@ -33,7 +57,7 @@ class PaymentsController < ApplicationController
 
     respond_to do |format|
       format.turbo_stream { render turbo_stream: turbo_stream.remove(@payment) }
-      format.html { redirect_to payments_path }
+      format.html { redirect_to payments_path, notice: "Pagamento removido." }
     end
   end
 
@@ -45,6 +69,6 @@ class PaymentsController < ApplicationController
   end
 
   def payment_params
-    params.require(:payment).permit(:amount_cents, :due_date, :method, :status, :notes, :paid_at)
+    params.require(:payment).permit(:enrollment_id, :amount_cents, :due_date, :method, :status, :notes, :paid_at)
   end
 end

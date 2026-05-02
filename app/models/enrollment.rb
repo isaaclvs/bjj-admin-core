@@ -6,6 +6,11 @@ class Enrollment < ApplicationRecord
   enum :status, { active: 0, cancelled: 1, suspended: 2 }
 
   validates :started_at, presence: true
+  validates :student_id, uniqueness: {
+    scope: :plan_id,
+    conditions: -> { active },
+    message: "já possui matrícula ativa neste plano"
+  }
 
   after_create :generate_first_payment
 

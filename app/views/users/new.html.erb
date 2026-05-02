@@ -1,0 +1,34 @@
+<% content_for :title, "Novo Usuário" %>
+
+<div class="max-w-md space-y-5">
+  <div><%= link_to "← Usuários", users_path, class: "text-sm text-gray-500 hover:text-gray-700" %></div>
+
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+    <h2 class="text-xl font-bold text-gray-900 mb-1">Novo Usuário</h2>
+    <p class="text-sm text-gray-500 mb-5">
+      Uma senha temporária será gerada. O usuário deve redefinir em <strong>Esqueci minha senha</strong>.
+    </p>
+
+    <%= render "shared/errors", object: @user %>
+
+    <%= form_with model: @user, class: "space-y-5" do |f| %>
+      <div>
+        <%= f.label :email, "E-mail", class: "form-label" %>
+        <%= f.email_field :email, class: "form-input", required: true %>
+      </div>
+
+      <div>
+        <%= f.label :role, "Papel", class: "form-label" %>
+        <%= f.select :role,
+              [["Professor", "teacher"], ["Dono", "owner"]],
+              { selected: "teacher" },
+              class: "form-input" %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit "Criar Usuário", class: "btn-primary cursor-pointer" %>
+        <%= link_to "Cancelar", users_path, class: "btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

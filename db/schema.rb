@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_02_034031) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_02_040454) do
   create_table "academies", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -28,6 +28,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_02_034031) do
     t.integer "student_id", null: false
     t.datetime "updated_at", null: false
     t.index ["plan_id"], name: "index_enrollments_on_plan_id"
+    t.index ["status"], name: "index_enrollments_on_status"
     t.index ["student_id"], name: "index_enrollments_on_student_id"
   end
 
@@ -70,7 +71,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_02_034031) do
     t.date "paid_at"
     t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false
+    t.index ["due_date"], name: "index_payments_on_due_date"
     t.index ["enrollment_id"], name: "index_payments_on_enrollment_id"
+    t.index ["paid_at"], name: "index_payments_on_paid_at"
+    t.index ["status"], name: "index_payments_on_status"
   end
 
   create_table "plans", force: :cascade do |t|
@@ -100,6 +104,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_02_034031) do
     t.integer "status", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["academy_id"], name: "index_students_on_academy_id"
+    t.index ["belt"], name: "index_students_on_belt"
+    t.index ["status"], name: "index_students_on_status"
   end
 
   create_table "users", force: :cascade do |t|

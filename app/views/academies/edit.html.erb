@@ -1,0 +1,35 @@
+<% content_for :title, "Configurações da Academia" %>
+
+<div class="max-w-xl space-y-5">
+  <h2 class="text-2xl font-bold text-gray-900">Configurações</h2>
+
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+    <h3 class="text-lg font-semibold text-gray-900 mb-5">Academia</h3>
+
+    <%= render "shared/errors", object: @academy %>
+
+    <%= form_with model: @academy, url: academy_path, method: :patch, class: "space-y-5" do |f| %>
+      <div>
+        <%= f.label :name, "Nome da academia", class: "form-label" %>
+        <%= f.text_field :name, class: "form-input", required: true %>
+      </div>
+
+      <div>
+        <%= f.label :slug, "Slug (link de auto-cadastro)", class: "form-label" %>
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-500">/public/</span>
+          <input type="text" value="<%= @academy.slug %>" disabled
+                 class="form-input flex-1 opacity-60 cursor-not-allowed">
+        </div>
+        <p class="mt-1 text-xs text-gray-500">
+          Link público para auto-cadastro de alunos:
+          <code class="bg-gray-100 px-1 rounded">/public/<%= @academy.slug %></code>
+        </p>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit "Salvar", class: "btn-primary cursor-pointer" %>
+      </div>
+    <% end %>
+  </div>
+</div>

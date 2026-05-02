@@ -1,0 +1,49 @@
+<% content_for :title, "Usuários" %>
+
+<div class="space-y-5">
+  <div class="flex items-center justify-between">
+    <h2 class="text-2xl font-bold text-gray-900">Usuários</h2>
+    <%= link_to "Novo Usuário", new_user_path, class: "btn-primary" %>
+  </div>
+
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <% if @users.any? %>
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="th">E-mail</th>
+            <th class="th">Papel</th>
+            <th class="th sr-only">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <% @users.each do |user| %>
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="td font-medium"><%= user.email %></td>
+              <td class="td">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
+                             <%= user.owner? ? 'bg-indigo-100 text-indigo-800' : 'bg-gray-100 text-gray-700' %>">
+                  <%= user.owner? ? "Dono" : "Professor" %>
+                </span>
+              </td>
+              <td class="td text-right">
+                <% if user != current_user %>
+                  <%= button_to "Remover", user,
+                        method: :delete,
+                        data: { turbo_confirm: "Remover #{user.email}?" },
+                        class: "text-sm text-red-600 hover:underline bg-transparent border-none p-0 cursor-pointer" %>
+                <% else %>
+                  <span class="text-xs text-gray-400">você</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="text-center py-12 text-gray-500">
+        <p>Nenhum usuário além de você.</p>
+      </div>
+    <% end %>
+  </div>
+</div>

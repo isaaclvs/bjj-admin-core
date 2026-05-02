@@ -59,8 +59,7 @@ class HealthRecordsController < ApplicationController
   def health_record_params
     params.require(:health_record).permit(
       :blood_type, :uses_medication, :medication_notes,
-      :risk_notes, :signed_at, :signature_data,
-      :lgpd_consent, :lgpd_consent_at,
+      :risk_notes, :signature_data, :lgpd_consent,
       comorbidities: [], allergies: [], injuries: []
     )
   end

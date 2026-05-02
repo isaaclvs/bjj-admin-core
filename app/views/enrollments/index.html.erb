@@ -1,0 +1,60 @@
+<% content_for :title, "Matrículas" %>
+
+<div class="space-y-5">
+  <div class="flex items-center justify-between">
+    <h2 class="text-2xl font-bold text-gray-900">Matrículas</h2>
+    <%= link_to "Nova Matrícula", new_enrollment_path, class: "btn-primary" %>
+  </div>
+
+  <div id="enrollments-list" class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <% if @enrollments.any? %>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="th">Aluno</th>
+              <th class="th">Plano</th>
+              <th class="th">Início</th>
+              <th class="th">Validade</th>
+              <th class="th">Status</th>
+              <th class="th sr-only">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <% @enrollments.each do |enrollment| %>
+              <tr id="<%= dom_id(enrollment) %>" class="hover:bg-gray-50 transition-colors">
+                <td class="td">
+                  <%= link_to enrollment.student.name, enrollment.student,
+                        class: "font-medium text-indigo-600 hover:text-indigo-800" %>
+                </td>
+                <td class="td text-sm text-gray-600"><%= enrollment.plan.name %></td>
+                <td class="td text-sm text-gray-600"><%= enrollment.started_at.strftime("%d/%m/%Y") %></td>
+                <td class="td text-sm text-gray-600">
+                  <%= enrollment.expires_at&.strftime("%d/%m/%Y") || "—" %>
+                </td>
+                <td class="td"><%= status_badge(enrollment.status) %></td>
+                <td class="td text-right">
+                  <% if enrollment.active? %>
+                    <%= button_to "Cancelar", enrollment,
+                          method: :delete,
+                          data: { turbo_confirm: "Cancelar matrícula de #{enrollment.student.name}?" },
+                          class: "text-sm text-red-600 hover:underline bg-transparent border-none p-0 cursor-pointer" %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="px-4 py-3 border-t border-gray-200">
+        <%== pagy_nav(@pagy) %>
+      </div>
+    <% else %>
+      <div class="text-center py-12 text-gray-500">
+        <p class="text-lg">Nenhuma matrícula encontrada.</p>
+        <%= link_to "Criar primeira matrícula", new_enrollment_path, class: "mt-2 text-indigo-600 hover:underline" %>
+      </div>
+    <% end %>
+  </div>
+</div>

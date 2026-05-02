@@ -1,4 +1,13 @@
 class EnrollmentsController < ApplicationController
+  def index
+    authorize Enrollment
+    @pagy, @enrollments = pagy(
+      current_academy.enrollments
+        .includes(:student, :plan)
+        .order("students.name")
+    )
+  end
+
   def new
     @enrollment = Enrollment.new
     @students   = current_academy.students.active.order(:name)
