@@ -56,12 +56,42 @@ Or with Foreman (runs both in one terminal):
 foreman start
 ```
 
+## Running with Docker
+
+**Requirements:** Docker + Docker Compose
+
+```bash
+cp .env.example .env
+# Fill in POSTGRES_PASSWORD and RAILS_MASTER_KEY (content of config/master.key)
+
+docker compose up --build
+```
+
+The stack starts three services:
+
+| Service | Description |
+|---|---|
+| `db` | PostgreSQL 16 |
+| `web` | Rails app + Thruster (HTTP/2 proxy) on port 80 |
+| `worker` | Solid Queue background job processor |
+
+On first boot, `web` runs `db:prepare` automatically (creates schema and runs migrations).
+
+To seed initial data:
+
+```bash
+docker compose exec web bin/rails db:seed
+```
+
 ## Environment variables
 
 | Variable | Default | Description |
 |---|---|---|
-| `MAILER_FROM` | `no-reply@bjjadmin.com.br` | Sender address for all outgoing emails |
-| `DATABASE_URL` | SQLite (dev) | PostgreSQL connection string in production |
+| `RAILS_MASTER_KEY` | — | **Required.** Contents of `config/master.key` |
+| `POSTGRES_PASSWORD` | — | **Required.** Password for the `bjj_admin` DB user |
+| `DATABASE_URL` | set by compose | PostgreSQL connection string (override if using external DB) |
+| `MAILER_FROM` | `no-reply@bjjadmin.com.br` | Sender address for outgoing emails |
+| `PORT` | `80` | Host port mapped to the web container |
 
 ## Role permissions
 
